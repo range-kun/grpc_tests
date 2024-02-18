@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+service Download{
+  rpc DownloadFile(FileRequest) returns (stream FileResponse);
+}
+
+message FileRequest {
+  string filename = 1;
+}
+
+
+message FileResponse {
+  oneof xxx {
+    bytes chunk = 1;
+    int32 file_size = 2;
+  }
+}
