@@ -7,6 +7,8 @@ from grpc_interceptor import ServerInterceptor
 from grpc_interceptor.exceptions import GrpcException
 from pydantic import BaseModel
 
+from src.send_file.converter import protobuf_to_dict
+
 
 class ExceptionToStatusInterceptor(ServerInterceptor):
     def intercept(
@@ -53,10 +55,5 @@ class PydanticSerializer(ServerInterceptor):
             parameter = sig.parameters[name]
             if parameter.annotation.__base__ is not BaseModel:
                 continue
-            result_dict = {}
-            for field, value in request_or_iterator.ListFields():
-                result_dict[field.name] = value
-            request_or_iterator = parameter.annotation.parse_obj(result_dict)
+            request_or_iterator = parameter.annotation.parse_obj(protobuf_to_dict(request_or_iterator))
         return method(request_or_iterator, context)
-
-
