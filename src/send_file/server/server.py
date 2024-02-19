@@ -3,8 +3,10 @@ import os
 
 import grpc
 
+from src.send_file.server.interceptor import ExceptionToStatusInterceptor, PydanticSerializer
 from src.send_file.grpc_files import file_pb2_grpc
 from src.send_file.grpc_files import file_pb2
+from src.send_file.server.schemas import FileRequest
 
 
 def upload_file(file_name):
@@ -22,7 +24,7 @@ def upload_file(file_name):
 
 
 class DownloadServer:
-    def DownloadFile(self, request, context):
+    def DownloadFile(self, request: FileRequest, context):
         try:
             return upload_file(request)
         except FileNotFoundError:
@@ -32,7 +34,10 @@ class DownloadServer:
 
 
 if __name__ == '__main__':
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    server = grpc.server(futures.ThreadPoolExecutor(
+        max_workers=10),
+        interceptors=[ExceptionToStatusInterceptor(), PydanticSerializer()]
+    )
     file_pb2_grpc.add_DownloadServicer_to_server(
         DownloadServer(), server
     )
