@@ -3,6 +3,7 @@ from concurrent import futures
 
 import grpc
 
+from src.converter import protobuf_to_dict
 from src.route_guide.protos import base_pb2
 from src.route_guide.protos import base_pb2_grpc
 
@@ -41,6 +42,7 @@ class RouteGuideServicer:
         return feature
 
     def ListFeatures(self, request, context):
+        dicti = protobuf_to_dict(request)
         left = min(request.lo.longitude, request.hi.longitude)
         right = max(request.lo.longitude, request.hi.longitude)
         top = max(request.lo.latitude, request.hi.latitude)

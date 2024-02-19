@@ -7,7 +7,7 @@ from grpc_interceptor import ServerInterceptor
 from grpc_interceptor.exceptions import GrpcException
 from pydantic import BaseModel
 
-from src.send_file.converter import protobuf_to_dict
+from src.converter import protobuf_to_dict
 
 
 class ExceptionToStatusInterceptor(ServerInterceptor):

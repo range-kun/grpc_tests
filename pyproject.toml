@@ -12,6 +12,7 @@ grpcio-tools = "^1.60.1"
 openpyxl = "^3.1.2"
 grpc-interceptor = "^0.15.4"
 pydantic = "^2.6.1"
+six = "^1.16.0"
 
 
 [build-system]
